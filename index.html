@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartHub | Find Your Perfect Match</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Loading Spinner -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 1️⃣ Auth Screen -->
+    <section id="auth-screen" class="screen active">
+        <div class="logo-container">
+            <div class="logo-heart"><i class="fas fa-heart"></i></div>
+            <h1 class="app-name">HeartHub</h1>
+            <p>"Find Your Perfect Match"</p>
+        </div>
+        <button id="start-btn" class="btn-primary">Create Profile</button>
+    </section>
+
+    <!-- 2️⃣ Profile Setup Page -->
+    <section id="setup-screen" class="screen">
+        <div class="setup-container glass-panel">
+            <h2>About You</h2>
+            <div class="img-upload-container" onclick="document.getElementById('profile-input').click()">
+                <i class="fas fa-camera" id="camera-icon"></i>
+                <img id="profile-preview" src="" alt="Preview">
+                <input type="file" id="profile-input" hidden accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="user-name" placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="user-age" min="18" max="100" placeholder="24">
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="user-gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Interested In</label>
+                <select id="user-interest">
+                    <option value="women">Women</option>
+                    <option value="men">Men</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Short Bio</label>
+                <textarea id="user-bio" rows="3" placeholder="Tell us something about yourself..."></textarea>
+            </div>
+
+            <button id="save-profile-btn" class="btn-primary" style="width: 100%;">Get Started</button>
+        </div>
+    </section>
+
+    <!-- 3️⃣ Main Swipe Page -->
+    <section id="swipe-screen" class="screen">
+        <div class="card-container" id="card-deck">
+            <!-- Cards will be injected here -->
+        </div>
+
+        <div class="swipe-actions">
+            <button class="action-btn dislike" onclick="swipeLeft()"><i class="fas fa-times"></i></button>
+            <button class="action-btn heart" onclick="swipeRight()"><i class="fas fa-heart"></i></button>
+            <button class="action-btn like" id="matches-shortcut"><i class="fas fa-bolt"></i></button>
+        </div>
+    </section>
+
+    <!-- 3.1️⃣ Matches List Screen -->
+    <section id="matches-screen" class="screen">
+        <h2>Your Matches <span id="match-count" style="font-size: 1rem; color: var(--primary);">0</span></h2>
+        <div class="matches-grid" id="matches-container">
+            <!-- Matches will appear here -->
+        </div>
+    </section>
+
+    <!-- 3.2️⃣ Profile Settings Screen -->
+    <section id="profile-tab-screen" class="screen">
+        <img id="tab-profile-pic" class="profile-avatar-large" src="https://via.placeholder.com/150" alt="Me">
+        <h2 id="tab-profile-name">User Name, 24</h2>
+        <p id="tab-profile-bio" style="margin-top: 10px; max-width: 80%;">Your bio will appear here.</p>
+        
+        <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 15px; width: 100%;">
+            <button class="btn-secondary"><i class="fas fa-edit"></i> Edit Profile</button>
+            <button class="btn-secondary"><i class="fas fa-cog"></i> Settings</button>
+            <button id="logout-btn" class="btn-secondary" style="color: #ff4b2b;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </section>
+
+    <!-- 4️⃣ Match Modal -->
+    <div class="modal-overlay" id="match-modal">
+        <div class="modal-content">
+            <h1 class="match-title">It's a Match!</h1>
+            <div class="match-pics">
+                <img id="match-my-pic" src="" alt="Me">
+                <img id="match-their-pic" src="" alt="Them">
+            </div>
+            <p id="match-text" style="margin-bottom: 30px;"></p>
+            <button id="start-chat-btn" class="btn-primary" style="width: 100%;">Start Chat</button>
+            <button id="close-match-btn" class="btn-secondary" style="width: 100%; margin-top: 15px;">Keep Swiping</button>
+        </div>
+    </div>
+
+    <!-- 5️⃣ Chat Page -->
+    <section id="chat-screen" class="screen">
+        <div class="chat-header">
+            <button id="back-to-matches" class="btn-secondary" style="border: none; padding: 10px;"><i class="fas fa-chevron-left"></i></button>
+            <img id="chat-user-pic" src="" alt="">
+            <div>
+                <h3 id="chat-user-name" style="font-size: 1rem;">Name</h3>
+                <p style="font-size: 0.7rem; color: #4ade80;">Online</p>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-container">
+            <!-- Messages here -->
+        </div>
+        <div class="chat-input-area glass-panel">
+            <input type="text" id="message-input" class="chat-input" placeholder="Type a message...">
+            <button id="send-btn" class="btn-primary" style="padding: 10px 20px;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </section>
+
+    <!-- Navigation Bar -->
+    <nav class="app-nav glass-panel" id="main-nav" style="display: none;">
+        <div class="nav-item active" data-screen="swipe-screen"><i class="fas fa-fire"></i></div>
+        <div class="nav-item" data-screen="matches-screen"><i class="fas fa-comment-dots"></i></div>
+        <div class="nav-item" data-screen="profile-tab-screen"><i class="fas fa-user"></i></div>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
